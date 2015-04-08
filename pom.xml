@@ -20,9 +20,9 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.jboss.fuse.camel</groupId>
+  <groupId>biz.c24.io.camel</groupId>
   <artifactId>camel-c24io</artifactId>
-  <version>2.0.0-SNAPSHOT</version>
+  <version>1.0.0-SNAPSHOT</version>
   <name>C24 Camel Component</name>
 
   <properties>

@@ -104,11 +104,11 @@ The following example shows how to use C24IO using Spring XML; in this case it u
       </route>
     </camelContext>
 
-    <bean id="myDocFormat" class="org.jboss.fuse.camel.c24io.C24IODataFormat">
+    <bean id="myDocFormat" class="C24IODataFormat">
       <property name="elementTypeName" value="iso.std.iso.x20022.tech.xsd.pacs.x008.x001.x01.DocumentElement"/>
     </bean>
 
-    <bean id="tagValueFormat" class="org.jboss.fuse.camel.c24io.C24IODataFormat">
+    <bean id="tagValueFormat" class="C24IODataFormat">
       <property name="contentType" value="TagValuePair"/>
     </bean>
 

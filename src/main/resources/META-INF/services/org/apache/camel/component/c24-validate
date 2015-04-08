@@ -14,4 +14,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-class=org.jboss.fuse.camel.c24io.C24IOValidateComponent
+class=biz.c24.io.camel.c24io.C24IOValidateComponent
