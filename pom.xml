@@ -62,10 +62,12 @@
       <version>${c24.version}</version>
       <exclusions>
         <!-- TODO where does this come from ?? -->
+        <!--
         <exclusion>
           <groupId>net.sf.saxon</groupId>
           <artifactId>Saxon-EE</artifactId>
         </exclusion>
+        -->
       </exclusions>
     </dependency>
 
@@ -160,6 +162,21 @@
     </repository>
   </repositories>
 
+  <distributionManagement>
+    <repository>
+      <uniqueVersion>false</uniqueVersion>
+      <id>c24</id>
+      <name>C24 Maven Repository</name>
+      <url>http://repo.c24io.net:8081/nexus/content/repositories/releases</url>
+    </repository>
+    <snapshotRepository>
+      <uniqueVersion>false</uniqueVersion>
+      <id>c24-snapshot</id>
+      <name>C24 Maven Snapshot Repository</name>
+      <url>http://repo.c24io.net:8081/nexus/content/repositories/snapshots</url>
+    </snapshotRepository>
+  </distributionManagement>
+
 
   <build>
     <plugins>
@@ -171,10 +188,11 @@
             <!--
               TODO we need to figure out where this class is: net/sf/saxon/om/AxisIterator
               when we've figured that out hopefully the XPath / XQuery tests can work again
-             -->
+
             <exclude>**/XPathTest.*</exclude>
             <exclude>**/SpringXQueryTest.*</exclude>
             <exclude>**/ValidationTest.*</exclude>
+            -->
           </excludes>
         </configuration>
       </plugin>
