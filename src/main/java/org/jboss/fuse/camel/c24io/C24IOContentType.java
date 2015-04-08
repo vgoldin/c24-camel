@@ -20,5 +20,5 @@ import javax.xml.bind.annotation.XmlEnum;
 
 @XmlEnum(String.class)
 public enum C24IOContentType {
-    Default, Auto, Binary, Text, Java, Xml, Sax, TagValuePair
+    Default, Auto, Binary, Text, Java, Xml, Sax, TagValuePair, Json
 }

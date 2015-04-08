@@ -16,8 +16,6 @@
  */
 package org.jboss.fuse.camel.c24io;
 
-import java.io.IOException;
-
 import biz.c24.io.api.data.ComplexDataObject;
 import biz.c24.io.api.data.Element;
 import biz.c24.io.api.data.ValidationException;
@@ -28,26 +26,31 @@ import org.apache.camel.Message;
 import org.apache.camel.Processor;
 import org.apache.camel.util.ObjectHelper;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Transforms an <a href="http://fabric.fusesource.org/documentation/camel/c24io.html">C24 IO</a>
  * object into some output format
  *
  * @version $Revision$
  */
-public class C24IOTransform implements Processor {
+public class C24IOTransformAdvanced implements Processor {
     private Transform transform;
-    
-    public C24IOTransform(Transform transform) {
+
+    public C24IOTransformAdvanced(Transform transform) {
         this.transform = transform;
     }
 
-    public static C24IOTransform transform(Class<?> transformType) {
+    public static C24IOTransformAdvanced transform(Class<?> transformType) {
         Transform transformer = (Transform) ObjectHelper.newInstance(transformType);
         return transform(transformer);
     }
 
-    public static C24IOTransform transform(Transform transformer) {
-        return new C24IOTransform(transformer);
+    public static C24IOTransformAdvanced transform(Transform transformer) {
+        return new C24IOTransformAdvanced(transformer);
     }   
 
     public void process(Exchange exchange) throws Exception {
@@ -97,13 +100,34 @@ public class C24IOTransform implements Processor {
         this.transform = transform;
     }
 
+
+    /**
+     * Convert the output of a C24-iO transform to List form
+     *
+     * @param array
+     * @return
+     */
+    private static List<List<Object>> toList(Object[][] array) {
+
+        List<List<Object>> ret = null;
+
+        if (array != null) {
+            ret = new ArrayList<List<Object>>(array.length);
+
+            for (int i = 0; i < array.length; i++) {
+                ret.add(Arrays.asList(array[i]));
+            }
+        }
+
+        return ret;
+    }
+
     // Implementation methods
     //-------------------------------------------------------------------------
 
-    protected Object transform(Object[][] objects) throws ValidationException {
+    protected List<List<Object>> transform(Object[][] objects) throws ValidationException {
         Transform transformer = getTransform();
-        Object[][] answer = transformer.transform(objects);
-        return answer[0][0];
+        return toList(transformer.transform(objects));
     }
 
     // Implementation methods

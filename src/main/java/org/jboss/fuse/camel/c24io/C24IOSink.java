@@ -21,13 +21,7 @@ import java.io.IOException;
 
 import biz.c24.io.api.data.ComplexDataObject;
 import biz.c24.io.api.data.ValidationException;
-import biz.c24.io.api.presentation.BinarySink;
-import biz.c24.io.api.presentation.JavaClassSink;
-import biz.c24.io.api.presentation.SAXSink;
-import biz.c24.io.api.presentation.Sink;
-import biz.c24.io.api.presentation.TagValuePairSink;
-import biz.c24.io.api.presentation.TextualSink;
-import biz.c24.io.api.presentation.XMLSink;
+import biz.c24.io.api.presentation.*;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.InvalidPayloadException;
@@ -135,6 +129,13 @@ public class C24IOSink extends C24IOSource {
         return this;
     }
 
+    /**
+     * Sets the output sink to be Json
+     */
+    public C24IOSink json() {
+        setSink(new JsonSinkv2());
+        return this;
+    }
 
     // Implementation methods
     //-------------------------------------------------------------------------

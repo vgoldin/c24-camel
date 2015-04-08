@@ -22,12 +22,12 @@
 
   <groupId>org.jboss.fuse.camel</groupId>
   <artifactId>camel-c24io</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
-  <name>JBoss Fuse :: Camel C24IO support</name>
+  <version>2.0.0-SNAPSHOT</version>
+  <name>C24 Camel Component</name>
 
   <properties>
     <camel-version>2.13.0</camel-version>
-    <c24.version>4.5.2</c24.version>
+    <c24.version>4.8.0-SNAPSHOT</c24.version>
   </properties>
 
   <dependencies>

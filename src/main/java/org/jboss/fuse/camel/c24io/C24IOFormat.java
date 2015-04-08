@@ -24,19 +24,7 @@ import biz.c24.io.api.data.ComplexDataObject;
 import biz.c24.io.api.data.DataModel;
 import biz.c24.io.api.data.DocumentRoot;
 import biz.c24.io.api.data.Element;
-import biz.c24.io.api.presentation.BinarySink;
-import biz.c24.io.api.presentation.BinarySource;
-import biz.c24.io.api.presentation.JavaClassSink;
-import biz.c24.io.api.presentation.JavaClassSource;
-import biz.c24.io.api.presentation.SAXSink;
-import biz.c24.io.api.presentation.SAXSource;
-import biz.c24.io.api.presentation.Sink;
-import biz.c24.io.api.presentation.Source;
-import biz.c24.io.api.presentation.TagValuePairSink;
-import biz.c24.io.api.presentation.TextualSink;
-import biz.c24.io.api.presentation.TextualSource;
-import biz.c24.io.api.presentation.XMLSink;
-import biz.c24.io.api.presentation.XMLSource;
+import biz.c24.io.api.presentation.*;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.spi.DataFormat;
@@ -149,7 +137,11 @@ public class C24IOFormat implements DataFormat {
     }
 
     public void setSink(Sink sink) {
-        this.sink = sink;
+        this.sink = (Sink)sink.clone();
+    }
+
+    public Sink getSink() {
+        return this.sink;
     }
 
     public void setSource(Source source) {
@@ -211,6 +203,7 @@ public class C24IOFormat implements DataFormat {
             return new TextualSource();
         case Xml:
             return new XMLSource();
+
         default:
             throw new IllegalArgumentException("Unknown format type: " + content);
         }
@@ -227,6 +220,8 @@ public class C24IOFormat implements DataFormat {
                 return new BinarySink();
             } else if (isTextMimeType(mime)) {
                 return new TextualSink();
+            } else if (isJsonMimeType(mime)) {
+                return new JsonSinkv2();
             }
         }
         return getDefaultSink();
@@ -248,6 +243,8 @@ public class C24IOFormat implements DataFormat {
             return new XMLSink();
         case TagValuePair:
             return new TagValuePairSink();
+        case Json:
+            return new JsonSinkv2();
         default:
             throw new IllegalArgumentException("Unknown format type: " + content);
         }
@@ -268,4 +265,6 @@ public class C24IOFormat implements DataFormat {
     protected boolean isBinaryMimeType(String mime) {
         return mime.equals("application/octet-stream");
     }
+
+    protected boolean isJsonMimeType(String mime) { return mime.equals("application/json"); }
 }
