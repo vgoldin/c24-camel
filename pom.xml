@@ -22,7 +22,7 @@
 
   <groupId>biz.c24.io.camel</groupId>
   <artifactId>camel-c24io</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1-SNAPSHOT</version>
   <name>C24 Camel Component</name>
 
   <properties>
