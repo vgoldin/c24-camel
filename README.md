@@ -111,24 +111,75 @@ The following example shows how to use C24IO using Spring XML; in this case it u
     <bean id="tagValueFormat" class="C24IODataFormat">
       <property name="contentType" value="TagValuePair"/>
     </bean>
+    
+In some cases your transformation can have multiple outputs with each possibly containing multiple instances. In other words a two dimensional container - one dimension for the different outputs and another for each of their instances. Here is and example of how to deal with that.
+     
+     <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
+         <package>org.apache.camel.example.spring</package>
+         <endpoint uri="file://src/data" id="sourceFile"/>
+         <endpoint uri="file://src/target" id="targetDirectory"/>
+ 
+         <route id="file_to_json">
+             <from uri="sourceFile"/>
+             <unmarshal ref="fromFile"/>
+             <bean ref="theTransform"/>
+             <split>
+                <!-- splitting off each of the outputs -->
+                 <simple>${body}</simple>
+                 <split>
+                     <!-- splitting off each of the instances for a given output -->
+                     <simple>${body}</simple>
+                     <bean ref="toJSONSink"/>
+                     <to uri="targetDirectory"/>
+                 </split>
+             </split>
+         </route>
+ 
+     </camelContext>
+ 
+     <!-- Input format setup -->
+     <bean id="fromFile" class="org.apache.camel.model.DataFormatDefinition">
+         <property name="dataFormat" ref="C24Format"/>
+     </bean>
+     <bean id="C24Format" class="org.jboss.fuse.camel.c24io.C24IOFormat">
+         <property name="element" ref="elementToLoad"/>
+     </bean>
+     <bean id="elementToLoad" class="biz.c24.io.gettingstarted.transaction.TransactionsElement"/>
+ 
+ 
+     <!-- Transform setup - NOTE the use of ...C24IOTransformAdvanced -->
+     <bean id="myTransform" class="biz.c24.io.gettingstarted.transaction.transactions.StatGenTransform"/>
+     <bean id="theTransform" class="org.jboss.fuse.camel.c24io.C24IOTransformAdvanced">
+         <constructor-arg ref="myTransform"/>
+     </bean>    
+ 
+     <!-- Output format setup -->
+     <bean id="toJSONSink" class="org.jboss.fuse.camel.c24io.C24IOSink">
+         <property name="sink" ref="jsonSink"/>
+     </bean>
+     
+     <!-- Customising the JsonSink -->
+     <bean id="jsonSink" class="biz.c24.io.api.presentation.JsonSinkv2">
+         <property name="alwaysOutputMandatoryFields" value="true"/>
+     </bean>
 
 ### Content Types and auto discovery
 
-You may have spotted in the above that we use the [C24IOContentType](http://fusesource.com/docs/router/2.7/apidoc/org/apache/camel/model/dataformat/C24IOContentType.html)
+You may have spotted in the above that we use the [C24IOContentType](http://dev.c24.biz/camel_api/biz/c24/io/camel/c24io/C24IOContentType.html)
 which is an _enum_ in Java and the [Xml Configuration][Xml Configuration] to describe the kind of XML format to use such as binary, XML, Text etc.
 
 If no content type is specified we always use the default content type of the C24IO model in question. This is equivalent to the *Default* content type.
 
 If you wish to be flexible in what you accept or emit, we also support the *Auto* content type which will look for the *Content-Type* header on the input message and use that to try determine which of the content types to use; if none can be found then *Default* is used.
 
-e.g. you could support content posted with a MIME type of *application/xml* to indicate XML or *application/x-java-serialized-object* for serialization or *text/plain* for text etc.
+e.g. you could support content posted with a MIME type of *application/xml* to indicate XML or *application/json* for JSON or *application/x-java-serialized-object* for serialization or *text/plain* for text etc.
 
 ### Using
 
 To use this module you need to use the [FUSE Mediation Router](http://fusesource.com/products/enterprise-camel) distribution. Or you could just add the following to your pom.xml, substituting the version number for the latest & greatest release.
 
     <dependency>
-      <groupId>org.jboss.fuse.camel</groupId>
+      <groupId>biz.c24.io.camel</groupId>
       <artifactId>camel-c24io</artifactId>
       <version>\${camel-version}</version>
     </dependency>
@@ -136,18 +187,11 @@ To use this module you need to use the [FUSE Mediation Router](http://fusesource
 And ensure you are pointing at the maven repo
 
     <repository>
-      <id>fusesource-releases</id>
-      <name>FuseSource Release Repository</name>
-      <url>https://repo.fusesource.com/nexus/content/groups/public</url>
-      <releases><enabled>true</enabled></releases>
-      <snapshots><enabled>false</enabled></snapshots>
-    </repository>
-    <repository>
       <id>c24io.public</id>
       <name>C24IO Public Repository</name>
       <url>http://repo.c24io.net:8081/nexus/content/groups/public</url>
       <snapshots>
-        <enabled>true</enabled>
+        <enabled>false</enabled>
       </snapshots>
       <releases>
         <enabled>true</enabled>
