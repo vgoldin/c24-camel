@@ -138,23 +138,20 @@ In some cases your transformation can have multiple outputs with each possibly c
      </camelContext>
  
      <!-- Input format setup -->
-     <bean id="fromFile" class="org.apache.camel.model.DataFormatDefinition">
-         <property name="dataFormat" ref="C24Format"/>
-     </bean>
-     <bean id="C24Format" class="org.jboss.fuse.camel.c24io.C24IOFormat">
+     <bean id="fromFile" class="biz.c24.io.camel.c24io.C24IOFormat">
          <property name="element" ref="elementToLoad"/>
      </bean>
      <bean id="elementToLoad" class="biz.c24.io.gettingstarted.transaction.TransactionsElement"/>
  
  
-     <!-- Transform setup - NOTE the use of ...C24IOTransformAdvanced -->
-     <bean id="myTransform" class="biz.c24.io.gettingstarted.transaction.transactions.StatGenTransform"/>
-     <bean id="theTransform" class="org.jboss.fuse.camel.c24io.C24IOTransformAdvanced">
+     <!-- Transform setup - NOTE the use of ...C24IOTransformAdvanced -->     
+     <bean id="theTransform" class="biz.c24.io.camel.c24io.C24IOTransformAdvanced">
          <constructor-arg ref="myTransform"/>
      </bean>    
+     <bean id="myTransform" class="biz.c24.io.gettingstarted.transaction.transactions.StatGenTransform"/>
  
      <!-- Output format setup -->
-     <bean id="toJSONSink" class="org.jboss.fuse.camel.c24io.C24IOSink">
+     <bean id="toJSONSink" class="biz.c24.io.camel.c24io.C24IOSink">
          <property name="sink" ref="jsonSink"/>
      </bean>
      
