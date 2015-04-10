@@ -129,7 +129,7 @@ In some cases your transformation can have multiple outputs with each possibly c
                  <split>
                      <!-- splitting off each of the instances for a given output -->
                      <simple>${body}</simple>
-                     <bean ref="toJSONSink"/>
+                     <marshal ref="toJSONSink"/>
                      <to uri="targetDirectory"/>
                  </split>
              </split>
@@ -151,7 +151,7 @@ In some cases your transformation can have multiple outputs with each possibly c
      <bean id="myTransform" class="biz.c24.io.gettingstarted.transaction.transactions.StatGenTransform"/>
  
      <!-- Output format setup -->
-     <bean id="toJSONSink" class="biz.c24.io.camel.c24io.C24IOSink">
+     <bean id="toJSONSink" class="biz.c24.io.camel.c24io.C24IOFormat">
          <property name="sink" ref="jsonSink"/>
      </bean>
      
